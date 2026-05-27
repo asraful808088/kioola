@@ -1,0 +1,200 @@
+.task-planner-container {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  display: flex;
+  flex-direction: column;
+  height: 280px;
+}
+
+.planner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.planner-title-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.percent-complete {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--neon-cyan);
+}
+
+/* Progress bar */
+.progress-track-wrapper {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon-violet), var(--neon-cyan));
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 8px var(--neon-cyan);
+}
+
+/* Steps list */
+.steps-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.steps-list::-webkit-scrollbar {
+  width: 4px;
+}
+.steps-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+
+.empty-planner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #64748b;
+  text-align: center;
+}
+
+.empty-icon {
+  margin-bottom: 8px;
+  opacity: 0.4;
+}
+
+.empty-planner p {
+  font-size: 0.8rem;
+  max-width: 200px;
+}
+
+/* Step Item */
+.step-item {
+  display: flex;
+  gap: 12px;
+  position: relative;
+  min-height: 48px;
+}
+
+.step-marker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 16px;
+  flex-shrink: 0;
+}
+
+.step-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  background: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: all 0.3s;
+}
+
+.step-dot.completed {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.step-dot.active {
+  border-color: var(--neon-cyan);
+  background: rgba(6, 182, 212, 0.1);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
+}
+
+.check-icon {
+  color: #10b981;
+}
+
+.pulse-core {
+  width: 6px;
+  height: 6px;
+  background: var(--neon-cyan);
+  border-radius: 50%;
+  animation: corePulse 1.4s infinite;
+}
+
+@keyframes corePulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.5; }
+}
+
+.step-connector-line {
+  width: 1.5px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.step-item.completed .step-connector-line {
+  background: rgba(16, 185, 129, 0.25);
+}
+
+/* Step Content */
+.step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 8px;
+}
+
+.step-title {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #94a3b8;
+  transition: color 0.3s;
+}
+
+.completed .step-title {
+  color: #e2e8f0;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.active .step-title {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.step-details {
+  font-size: 0.72rem;
+  color: #64748b;
+  line-height: 1.3;
+}
+
+.active .step-details {
+  color: var(--neon-cyan);
+}

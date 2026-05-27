@@ -1,0 +1,183 @@
+.system-stats-container {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Gauge card */
+.gauge-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.gauge-card:hover {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.gauge-visual {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gauge-svg {
+  position: absolute;
+  transform: rotate(-90deg);
+}
+
+.gauge-progress-ring {
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gauge-icon-center {
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.02);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.gauge-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.gauge-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.gauge-val {
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-family: 'Fira Code', monospace;
+  margin: 2px 0;
+}
+
+.gauge-sub {
+  font-size: 0.62rem;
+  color: #475569;
+}
+
+/* GPU hardware badge */
+.gpu-device-info {
+  background: rgba(236, 72, 153, 0.03);
+  border: 1px solid rgba(236, 72, 153, 0.15);
+  border-radius: 6px;
+  padding: 6px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+}
+
+.info-label {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.info-value {
+  color: #ec4899;
+  font-weight: 700;
+}
+
+.neon-pink-text {
+  color: #ec4899;
+}
+
+/* Process Monitor Task Manager */
+.process-monitor {
+  background: rgba(10, 15, 30, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.process-header {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr;
+  padding: 8px 12px;
+  background: rgba(15, 23, 42, 0.8);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.process-rows {
+  display: flex;
+  flex-direction: column;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.process-rows::-webkit-scrollbar {
+  width: 4px;
+}
+.process-rows::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.process-row {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr;
+  padding: 6px 12px;
+  font-size: 0.72rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  align-items: center;
+  transition: background 0.2s;
+}
+
+.process-row:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.proc-name {
+  font-family: 'Fira Code', monospace;
+  color: #94a3b8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.proc-cpu {
+  color: #06b6d4;
+  font-weight: 600;
+  font-family: 'Fira Code', monospace;
+}
+
+.proc-ram {
+  color: #8b5cf6;
+  font-family: 'Fira Code', monospace;
+}
