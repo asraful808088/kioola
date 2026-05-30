@@ -41,6 +41,7 @@ export interface WorkspaceFile {
   content: string;
   type: 'code' | 'text' | 'image' | 'diff';
   originalContent?: string;
+  imports?: string[]; // Array of import paths this file references
 }
 
 export interface ApprovalPrompt {
@@ -119,6 +120,7 @@ interface AgentContextProps {
   toolLogs: ToolLog[];
   subagents: Subagent[];
   files: WorkspaceFile[];
+  setFiles: React.Dispatch<React.SetStateAction<WorkspaceFile[]>>;
   activeFile: WorkspaceFile | null;
   setActiveFile: (file: WorkspaceFile | null) => void;
   approvals: ApprovalPrompt[];
@@ -135,6 +137,10 @@ interface AgentContextProps {
   toggleBotStatus: (id: string) => void;
   updateBotWebhook: (id: string, url: string) => void;
   clearWorkspace: () => void;
+  projects: string[];
+  activeProject: string;
+  addProject: (name: string) => void;
+  setActiveProject: (name: string) => void;
   triggerBotBroadcast: (botId: string, channels: string[], text: string) => void;
   // Session Manager additions
   sessions: Session[];
@@ -200,6 +206,19 @@ export const AgentProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [activeFile, setActiveFile] = useState<WorkspaceFile | null>(null);
   const [approvals, setApprovals] = useState<ApprovalPrompt[]>([]);
   const [primaryModel, setPrimaryModel] = useState<string>('Gemini 3.5 Pro');
+
+  const [projects, setProjects] = useState<string[]>(['/sandbox/project/src']);
+  const [activeProject, setActiveProjectState] = useState<string>('/sandbox/project/src');
+
+  const addProject = (name: string) => {
+    if (name.trim() && !projects.includes(name.trim())) {
+      setProjects(prev => [...prev, name.trim()]);
+    }
+  };
+
+  const setActiveProject = (name: string) => {
+    setActiveProjectState(name);
+  };
   
   // Real-Time System Metrics State
   const [systemMetrics, setSystemMetrics] = useState<SystemMetrics>({
@@ -619,12 +638,50 @@ export const AgentProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               path: 'server/auth.ts',
               content: origCode,
               type: 'code',
+              imports: ['./middleware/tokenValidator', './config/secrets', './utils/logger'],
+            },
+            {
+              path: 'server/middleware/tokenValidator.ts',
+              content: `import { verifyJWT } from '../utils/crypto';\nimport { Logger } from '../utils/logger';\n\nexport function validateToken(token: string) {\n  const logger = new Logger('TokenValidator');\n  logger.info('Validating token...');\n  return verifyJWT(token);\n}`,
+              type: 'code',
+              imports: ['../utils/crypto', '../utils/logger'],
+            },
+            {
+              path: 'server/config/secrets.ts',
+              content: `// Environment secrets configuration\nexport const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key';\nexport const API_KEY = process.env.API_KEY || '';\nexport const DB_URI = process.env.DATABASE_URL || 'mongodb://localhost:27017/kioola';`,
+              type: 'code',
+              imports: [],
+            },
+            {
+              path: 'server/utils/logger.ts',
+              content: `export class Logger {\n  private context: string;\n  constructor(ctx: string) { this.context = ctx; }\n  info(msg: string) { console.log(\`[\${this.context}] \${msg}\`); }\n  error(msg: string) { console.error(\`[\${this.context}] ERROR: \${msg}\`); }\n  warn(msg: string) { console.warn(\`[\${this.context}] WARN: \${msg}\`); }\n}`,
+              type: 'code',
+              imports: [],
+            },
+            {
+              path: 'server/utils/crypto.ts',
+              content: `import jwt from 'jsonwebtoken';\nimport { JWT_SECRET } from '../config/secrets';\n\nexport function verifyJWT(token: string) {\n  return jwt.verify(token, JWT_SECRET);\n}\n\nexport function signJWT(payload: object) {\n  return jwt.sign(payload, JWT_SECRET, { expiresIn: '24h' });\n}`,
+              type: 'code',
+              imports: ['../config/secrets'],
+            },
+            {
+              path: 'server/routes/api.ts',
+              content: `import { validateSession } from '../auth';\nimport { Logger } from '../utils/logger';\n\nconst logger = new Logger('API Router');\n\nexport function registerRoutes(app: any) {\n  app.get('/api/profile', validateSession, (req, res) => {\n    logger.info('Profile endpoint hit');\n    res.json({ user: req.user });\n  });\n}`,
+              type: 'code',
+              imports: ['../auth', '../utils/logger'],
+            },
+            {
+              path: 'server/index.ts',
+              content: `import express from 'express';\nimport { registerRoutes } from './routes/api';\nimport { Logger } from './utils/logger';\n\nconst app = express();\nconst logger = new Logger('Server');\n\nregisterRoutes(app);\n\napp.listen(3000, () => {\n  logger.info('Server running on port 3000');\n});`,
+              type: 'code',
+              imports: ['./routes/api', './utils/logger'],
             },
           ]);
           setActiveFile({
             path: 'server/auth.ts',
             content: origCode,
             type: 'code',
+            imports: ['./middleware/tokenValidator', './config/secrets', './utils/logger'],
           });
 
           addAgentMessage(
@@ -714,6 +771,7 @@ export const AgentProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             path: 'server/auth.ts',
             content: fixedCode,
             type: 'code',
+            imports: ['./middleware/tokenValidator', './config/secrets', './utils/logger'],
           });
 
           addRoutingLog({
@@ -804,13 +862,15 @@ export const AgentProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             {
               path: 'dist/assets/index.js',
               content: '// Compiled output codes\n!(function(){"use strict"; console.log("running console...")})();',
-              type: 'code'
+              type: 'code',
+              imports: [],
             }
           ]);
           setActiveFile({
             path: 'dist/assets/index.js',
             content: '// Compiled output codes\n!(function(){"use strict"; console.log("running console...")})();',
-            type: 'code'
+            type: 'code',
+            imports: [],
           });
 
           setSubagents((prev) =>
@@ -1240,6 +1300,7 @@ export const AgentProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         toolLogs,
         subagents,
         files,
+        setFiles,
         activeFile,
         setActiveFile,
         approvals,
@@ -1256,6 +1317,10 @@ export const AgentProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         toggleBotStatus,
         updateBotWebhook,
         clearWorkspace,
+        projects,
+        activeProject,
+        addProject,
+        setActiveProject,
         triggerBotBroadcast,
         // Sessions
         sessions,
