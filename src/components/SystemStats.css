@@ -3,29 +3,32 @@
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(12px);
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  overflow: hidden;
 }
 
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 8px;
 }
 
 /* Gauge card */
 .gauge-card {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   background: rgba(15, 23, 42, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.03);
-  padding: 8px 12px;
+  padding: 6px 8px;
   border-radius: 8px;
   transition: all 0.3s;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .gauge-card:hover {
@@ -35,8 +38,9 @@
 
 .gauge-visual {
   position: relative;
-  width: 90px;
-  height: 90px;
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,8 +61,8 @@
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.02);
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.04);
 }
@@ -66,26 +70,34 @@
 .gauge-info {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .gauge-title {
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   font-weight: 700;
   color: #64748b;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .gauge-val {
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 800;
   font-family: 'Fira Code', monospace;
-  margin: 2px 0;
+  margin: 1px 0;
 }
 
 .gauge-sub {
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* GPU hardware badge */
@@ -93,21 +105,26 @@
   background: rgba(236, 72, 153, 0.03);
   border: 1px solid rgba(236, 72, 153, 0.15);
   border-radius: 6px;
-  padding: 6px 12px;
+  padding: 5px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
+  gap: 8px;
 }
 
 .info-label {
   color: #64748b;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .info-value {
   color: #ec4899;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .neon-pink-text {
@@ -125,9 +142,9 @@
 .process-header {
   display: grid;
   grid-template-columns: 1.8fr 1fr 1fr;
-  padding: 8px 12px;
+  padding: 6px 10px;
   background: rgba(15, 23, 42, 0.8);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
   color: #475569;
   text-transform: uppercase;
@@ -152,8 +169,8 @@
 .process-row {
   display: grid;
   grid-template-columns: 1.8fr 1fr 1fr;
-  padding: 6px 12px;
-  font-size: 0.72rem;
+  padding: 5px 10px;
+  font-size: 0.68rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.02);
   align-items: center;
   transition: background 0.2s;
@@ -180,4 +197,51 @@
 .proc-ram {
   color: #8b5cf6;
   font-family: 'Fira Code', monospace;
+}
+
+/* ---- SystemStats Responsive ---- */
+@media (max-width: 1200px) {
+  .stats-grid {
+    gap: 6px;
+  }
+  .gauge-card {
+    padding: 5px 6px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .system-stats-container {
+    padding: 10px;
+    gap: 8px;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .gauge-visual {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+  .gauge-icon-center {
+    width: 22px;
+    height: 22px;
+  }
+  .gauge-title {
+    font-size: 0.6rem;
+  }
+  .gauge-val {
+    font-size: 0.88rem;
+  }
+  .gauge-sub {
+    font-size: 0.52rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
 }

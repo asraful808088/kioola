@@ -209,6 +209,7 @@ export const DiscordBroadcastConsole: React.FC = () => {
 
   // Core Panels State
   const [activeTab, setActiveTab] = useState<'broadcast' | 'mover' | 'moderation' | 'analytics'>('broadcast');
+  const [isTabDrawerOpen, setIsTabDrawerOpen] = useState(false);
   const [voiceChannels, setVoiceChannels] = useState<DiscordVoiceChannel[]>(mockVoiceChannels);
 
   // Broadcast state
@@ -1006,6 +1007,71 @@ The Discord API Webhook has queued this signature. The ban/mute filters will app
             <span className="dbc-tab-icon">📊</span> Chat Analytics & DM Gateway
           </button>
         </div>
+
+        {/* ── Mobile Navigation Toggle ── */}
+        <div className="dbc-tabs-mobile-toggle">
+          <button className="dbc-mobile-menu-btn" onClick={() => setIsTabDrawerOpen(true)}>
+            <span className="menu-icon">☰</span>
+            <span className="active-tab-label">
+              {activeTab === 'broadcast' && '📡 Broadcast Gateway'}
+              {activeTab === 'mover' && '🔀 VC Channel Mover'}
+              {activeTab === 'moderation' && '🛡️ AI Moderation Portal'}
+              {activeTab === 'analytics' && '📊 Chat Analytics & DM Gateway'}
+            </span>
+          </button>
+        </div>
+
+        {/* ── Mobile Tab Drawer ── */}
+        {isTabDrawerOpen && (
+          <>
+            <div className="dbc-tab-drawer-backdrop" onClick={() => setIsTabDrawerOpen(false)} />
+            <div className="dbc-tab-drawer">
+              <div className="dbc-drawer-header">
+                <h3>Console Viewports</h3>
+                <button className="dbc-drawer-close" onClick={() => setIsTabDrawerOpen(false)}>✕</button>
+              </div>
+              <div className="dbc-drawer-tabs">
+                <button
+                  className={`dbc-drawer-tab-btn ${activeTab === 'broadcast' ? 'active' : ''}`}
+                  onClick={() => {
+                    setActiveTab('broadcast');
+                    setIsTabDrawerOpen(false);
+                  }}
+                >
+                  <span className="dbc-tab-icon">📡</span> Broadcast Gateway
+                </button>
+                <button
+                  className={`dbc-drawer-tab-btn ${activeTab === 'mover' ? 'active' : ''}`}
+                  onClick={() => {
+                    setActiveTab('mover');
+                    setIsTabDrawerOpen(false);
+                  }}
+                >
+                  <span className="dbc-tab-icon">🔀</span> VC Channel Mover
+                  {isMoverRunning && <span className="dbc-mover-live-badge">LIVE</span>}
+                </button>
+                <button
+                  className={`dbc-drawer-tab-btn ${activeTab === 'moderation' ? 'active' : ''}`}
+                  onClick={() => {
+                    setActiveTab('moderation');
+                    setIsTabDrawerOpen(false);
+                  }}
+                >
+                  <span className="dbc-tab-icon">🛡️</span> AI Moderation Portal
+                </button>
+                <button
+                  className={`dbc-drawer-tab-btn ${activeTab === 'analytics' ? 'active' : ''}`}
+                  onClick={() => {
+                    setActiveTab('analytics');
+                    setIsTabDrawerOpen(false);
+                  }}
+                >
+                  <span className="dbc-tab-icon">📊</span> Chat Analytics & DM Gateway
+                </button>
+              </div>
+            </div>
+          </>
+        )}
 
         {/* ── Main Tabbed body ── */}
         {activeTab === 'broadcast' ? (

@@ -2405,3 +2405,147 @@
   }
 }
 
+/* ==========================================
+   MOBILE TAB DRAWER SYSTEM
+   ========================================== */
+.dbc-tabs-mobile-toggle {
+  display: none;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.dbc-mobile-menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(88, 101, 242, 0.1);
+  border: 1px solid rgba(88, 101, 242, 0.3);
+  color: #a5aeff;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.dbc-mobile-menu-btn:hover {
+  background: rgba(88, 101, 242, 0.18);
+  border-color: rgba(88, 101, 242, 0.5);
+}
+
+.dbc-tab-drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  animation: dbcDrawerFade 0.25s ease-out;
+}
+
+.dbc-tab-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  background: rgba(10, 15, 26, 0.98);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.6);
+  animation: dbcDrawerSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dbc-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.dbc-drawer-header h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #06b6d4;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dbc-drawer-close {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.dbc-drawer-close:hover {
+  color: #ef4444;
+}
+
+.dbc-drawer-tabs {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dbc-drawer-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.dbc-drawer-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #f1f5f9;
+}
+
+.dbc-drawer-tab-btn.active {
+  background: rgba(88, 101, 242, 0.12);
+  border-color: rgba(88, 101, 242, 0.3);
+  color: #a5aeff;
+  box-shadow: 0 0 12px rgba(88, 101, 242, 0.15);
+}
+
+@keyframes dbcDrawerSlide {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes dbcDrawerFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Switch navigation layouts on mobile */
+@media (max-width: 767px) {
+  .dbc-tabs {
+    display: none !important;
+  }
+  .dbc-tabs-mobile-toggle {
+    display: block;
+  }
+}
+

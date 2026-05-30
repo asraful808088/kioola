@@ -14,30 +14,30 @@ export const SystemStats: React.FC = () => {
     subtext: string
   ) => {
     // Radius of SVG circle
-    const r = 36;
+    const r = 20;
     const circ = 2 * Math.PI * r;
     const strokeDashoffset = circ - (value / 100) * circ;
 
     return (
       <div className="gauge-card">
         <div className="gauge-visual">
-          <svg width="90" height="90" className="gauge-svg">
+          <svg width="52" height="52" viewBox="0 0 52 52" className="gauge-svg">
             <circle
               className="gauge-bg-ring"
-              cx="45"
-              cy="45"
+              cx="26"
+              cy="26"
               r={r}
               stroke="rgba(255,255,255,0.04)"
-              strokeWidth="5.5"
+              strokeWidth="3.5"
               fill="none"
             />
             <circle
               className="gauge-progress-ring"
-              cx="45"
-              cy="45"
+              cx="26"
+              cy="26"
               r={r}
               stroke={color}
-              strokeWidth="5.5"
+              strokeWidth="3.5"
               strokeDasharray={circ}
               strokeDashoffset={strokeDashoffset}
               strokeLinecap="round"

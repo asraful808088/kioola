@@ -4,19 +4,19 @@ import { AgentChat } from './components/AgentChat';
 import { SubagentGraph } from './components/SubagentGraph';
 import { ActionCenter } from './components/ActionCenter';
 import { TaskPlanner } from './components/TaskPlanner';
-import { ToolTimeline } from './components/ToolTimeline';
-import { WorkspaceViewer } from './components/WorkspaceViewer';
+import { CodeOutputPanel } from './components/CodeOutputPanel';
 import { SystemStats } from './components/SystemStats';
 import { ModelRouter } from './components/ModelRouter';
 import { SocialMediaControl } from './components/SocialMediaControl';
 import { DiscordBroadcastConsole } from './components/DiscordBroadcastConsole';
-import { Timer, Cpu, Terminal, Layers, Coins, RotateCcw, Sparkles, MessageSquare } from './components/Icons';
+import { Cpu, RotateCcw, Sparkles, MessageSquare } from './components/Icons';
 import './App.css';
 
 const DashboardContent: React.FC = () => {
-  const { scenario, isSimulating, metrics, startSimulation, resetSimulation, isFocusMode } = useAgent();
+  const { scenario, isSimulating, startSimulation, resetSimulation, isFocusMode } = useAgent();
   const [activeTab, setActiveTab] = React.useState<'diagnostics' | 'workspace'>('diagnostics');
   const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(false);
+  const [isGraphExpanded, setIsGraphExpanded] = React.useState<boolean>(false);
 
   return (
     <div className={`app-layout ${isFocusMode ? 'focus-mode-active' : ''}`}>
@@ -76,34 +76,7 @@ const DashboardContent: React.FC = () => {
         </div>
       </header>
 
-      {/* Metrics Telemetry Ribbon */}
-      <div className="telemetry-bar">
-        <div className="telemetry-item">
-          <Timer size={14} className="neon-cyan-text" />
-          <div className="telemetry-label">Active duration</div>
-          <div className="telemetry-val">{metrics.durationSec}s</div>
-        </div>
-        <div className="telemetry-item">
-          <Cpu size={14} className="neon-violet-text" />
-          <div className="telemetry-label">Tokens run</div>
-          <div className="telemetry-val">{metrics.tokensUsed.toLocaleString()}</div>
-        </div>
-        <div className="telemetry-item">
-          <Terminal size={14} className="neon-cyan-text" />
-          <div className="telemetry-label">Tool logs</div>
-          <div className="telemetry-val">{metrics.toolCallsCount}</div>
-        </div>
-        <div className="telemetry-item">
-          <Layers size={14} className="neon-violet-text" />
-          <div className="telemetry-label">Subagents run</div>
-          <div className="telemetry-val">{metrics.subagentsCount}</div>
-        </div>
-        <div className="telemetry-item">
-          <Coins size={14} className="neon-cyan-text" />
-          <div className="telemetry-label">Est. Cost</div>
-          <div className="telemetry-val">${metrics.cost.toFixed(4)}</div>
-        </div>
-      </div>
+
 
       {/* Responsive Navigation Tab bar (Only visible on tablet & mobile resolutions) */}
       <div className="responsive-tabs-bar">
@@ -157,22 +130,17 @@ const DashboardContent: React.FC = () => {
 
         {/* Column 3: Orchestration Graph & Workspaces */}
         <section className={`dashboard-col col-3 ${activeTab === 'workspace' ? 'mobile-active' : 'mobile-hidden'}`}>
-          <div className="panel-row-top">
+          <div className={`panel-row-top ${isGraphExpanded ? 'expanded' : ''}`}>
             <div className="panel-wrapper graph-wrapper">
-              <SubagentGraph />
+              <SubagentGraph isExpanded={isGraphExpanded} setIsExpanded={setIsGraphExpanded} />
             </div>
             <div className="panel-wrapper plan-wrapper">
               <TaskPlanner />
             </div>
           </div>
-          <div className="panel-row-mid">
-            <div className="panel-wrapper timeline-wrapper">
-              <ToolTimeline />
-            </div>
-          </div>
           <div className="panel-row-bottom">
-            <div className="panel-wrapper workspace-wrapper">
-              <WorkspaceViewer />
+            <div className="panel-wrapper code-output-wrapper">
+              <CodeOutputPanel />
             </div>
           </div>
         </section>
